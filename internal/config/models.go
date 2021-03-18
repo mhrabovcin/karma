@@ -9,6 +9,7 @@ type AlertmanagerConfig struct {
 	Name        string
 	URI         string
 	ExternalURI string `yaml:"external_uri" mapstructure:"external_uri"`
+	ProxyURL    string `yaml:"proxy_url" mapstructure:"proxy_url"`
 	Timeout     time.Duration
 	Proxy       bool
 	ReadOnly    bool `yaml:"readonly" mapstructure:"readonly"`
