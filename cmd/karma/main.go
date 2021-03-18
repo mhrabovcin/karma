@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"path"
@@ -134,6 +135,22 @@ func setupUpstreams() error {
 			}
 		}
 
+		// If proxy address was provided use this to connect to the remote endpoint
+		if s.ProxyURL != "" {
+			if httpTransport == nil {
+				httpTransport = &http.Transport{}
+			}
+			proxyURL, err := url.Parse(s.ProxyURL)
+			if err != nil {
+				return fmt.Errorf("Failed to parse provided proxy url %q: %w", s.ProxyURL, err)
+			}
+			if transport, ok := httpTransport.(*http.Transport); ok {
+				transport.Proxy = http.ProxyURL(proxyURL)
+			} else {
+				return fmt.Errorf("Failed to set ProxyURL for Alertmanager '%s' with URL '%s': %s", s.Name, s.ProxyURL, err)
+			}
+		}
+
 		am, err := alertmanager.NewAlertmanager(
 			s.Name,
 			s.URI,
@@ -141,7 +158,7 @@ func setupUpstreams() error {
 			alertmanager.WithRequestTimeout(s.Timeout),
 			alertmanager.WithProxy(s.Proxy),
 			alertmanager.WithReadOnly(s.ReadOnly),
-			alertmanager.WithHTTPTransport(httpTransport), // we will pass a nil unless TLS.CA or TLS.Cert is set
+			alertmanager.WithHTTPTransport(httpTransport), // we will pass a nil unless TLS.CA, TLS.Cert or ProxyURL is set
 			alertmanager.WithHTTPHeaders(s.Headers),
 		)
 		if err != nil {
