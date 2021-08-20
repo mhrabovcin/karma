@@ -13,7 +13,8 @@ type AlertmanagerTLS struct {
 	CA                 string
 	Cert               string
 	Key                string
-	InsecureSkipVerify bool `yaml:"insecureSkipVerify" koanf:"insecureSkipVerify"`
+	ServerName         string `yaml:"serverName" koanf:"serverName"`
+	InsecureSkipVerify bool   `yaml:"insecureSkipVerify" koanf:"insecureSkipVerify"`
 }
 
 type AlertmanagerHealthcheck struct {
