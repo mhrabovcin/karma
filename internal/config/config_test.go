@@ -47,6 +47,7 @@ alertmanager:
         ca: ""
         cert: ""
         key: ""
+        server_name: ""
         insecureSkipVerify: false
       headers: {}
       cors:

@@ -171,6 +171,7 @@ alertmanager:
         ca: string
         cert: string
         key: string
+        server_name: string
         insecureSkipVerify: bool
       proxy_url: string
       headers:
@@ -234,6 +235,10 @@ alertmanager:
   TLS connections to this Alertmanager instance if it requires a TLS client
   authentication.
   Note that this option requires `tls:cert` to be also set.
+- `tls:server_name` - a server name used to establish TLS connection to this
+  Alsertmanager instance. This is SNI sent by client that can be used when
+  multiple services are running on a single load balancer in front of an
+  Alertmanager instance.
 - `tls:insecureSkipVerify` - disable server certificate validation, can be set
   to allow using self-signed certs, use at your own risk
 - `proxy_url` - sets a proxy for HTTP client used for making requests to the
